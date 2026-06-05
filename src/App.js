@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import RegistrationForm from "./components/RegistrationForm";
+import Dashboard from "./components/Dashboard";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 function App() {
+  const [view, setView] = useState("registration");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <nav className="navbar navbar-dark bg-dark">
+        <div className="container-fluid">
+          <span className="navbar-brand">JMJ School</span>
+          <div>
+            <button
+              className="btn btn-outline-light me-2"
+              onClick={() => setView("registration")}
+            >
+              Registration
+            </button>
+            <button
+              className="btn btn-outline-light"
+              onClick={() => setView("dashboard")}
+            >
+              Dashboard
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {view === "registration" ? <RegistrationForm /> : <Dashboard />}
     </div>
   );
 }
