@@ -36,10 +36,31 @@ function RegistrationForm() {
     setSortConfig({ key, direction });
   };
 
+  const uniqueClasses = useMemo(() => {
+    const classes = new Set(students.map(s => s.CLASS).filter(Boolean));
+    return Array.from(classes).sort();
+  }, [students]);
+
+  const insights = useMemo(() => {
+    const overallTotal = students.length;
+    const overallRegistered = students.filter(s => s.extraActivity || s["EXTRA Cultural Activity"]).length;
+
+    const classStudents = filterClass ? students.filter(s => s.CLASS === filterClass) : students;
+    const classTotal = classStudents.length;
+    const classRegistered = classStudents.filter(s => s.extraActivity || s["EXTRA Cultural Activity"]).length;
+
+    return {
+      overallTotal,
+      overallRegistered,
+      classTotal,
+      classRegistered,
+    };
+  }, [students, filterClass]);
+
   const filteredAndSortedStudents = useMemo(() => {
     let filtered = students.filter(student => {
       const matchName = (student.NAME || "").toLowerCase().includes(filterName.toLowerCase());
-      const matchClass = (student.CLASS || "").toLowerCase().includes(filterClass.toLowerCase());
+      const matchClass = filterClass ? student.CLASS === filterClass : true;
       return matchName && matchClass;
     });
 
@@ -63,12 +84,39 @@ function RegistrationForm() {
     <div className="container mt-5">
       <h2 className="text-center mb-4">JMJ Extracurricular Activity Registration</h2>
 
+      {/* Dashboard Insights */}
+      <div className="row mb-4">
+        <div className="col-md-6 mb-3">
+          <div className="card text-white bg-info mb-3 h-100">
+            <div className="card-header text-center">Overall Insights</div>
+            <div className="card-body">
+              <h5 className="card-title">Total Students: {insights.overallTotal}</h5>
+              <p className="card-text">Registered for Activities: {insights.overallRegistered}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 mb-3">
+          <div className="card text-white bg-success mb-3 h-100">
+            <div className="card-header text-center">{filterClass ? `Insights for Class: ${filterClass}` : "Insights for All Classes"}</div>
+            <div className="card-body">
+              <h5 className="card-title">Total Students: {insights.classTotal}</h5>
+              <p className="card-text">Registered for Activities: {insights.classRegistered}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="row mb-3">
         <div className="col-md-6">
           <input type="text" className="form-control" placeholder="Filter by Name..." value={filterName} onChange={e => setFilterName(e.target.value)} />
         </div>
         <div className="col-md-6">
-          <input type="text" className="form-control" placeholder="Filter by Class..." value={filterClass} onChange={e => setFilterClass(e.target.value)} />
+          <select className="form-select" value={filterClass} onChange={e => setFilterClass(e.target.value)}>
+            <option value="">All Classes</option>
+            {uniqueClasses.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -89,7 +137,7 @@ function RegistrationForm() {
               <td>{student.NAME}</td>
               <td>{student.CLASS}</td>
               <td>{student["FATHER NAME"]}</td>
-              <td>{student.PHONE}</td>
+              <td><a href={`tel:${student.PHONE}`} className="footer-icon" target="_blank" rel="noopener noreferrer">{student.PHONE}</a></td>
               <td>
                 <select
                   className="form-select"
