@@ -137,7 +137,7 @@ function RegistrationForm() {
               <td>{student.NAME}</td>
               <td>{student.CLASS}</td>
               <td>{student["FATHER NAME"]}</td>
-              <td><a href={`tel:${student.PHONE}`} className="footer-icon" target="_blank" rel="noopener noreferrer">{student.PHONE}</a></td>
+              <td><a href={`tel:${student.PHONE}`} className="footer-icon link-underline-dark" target="_blank" rel="noopener noreferrer">{student.PHONE}</a></td>
               <td>
                 <select
                   className="form-select"
