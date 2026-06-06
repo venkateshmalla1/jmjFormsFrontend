@@ -107,10 +107,10 @@ function RegistrationForm() {
       </div>
 
       <div className="row mb-3">
-        <div className="col-md-6">
+        <div className="col-md-6 mb-3">
           <input type="text" className="form-control" placeholder="Filter by Name..." value={filterName} onChange={e => setFilterName(e.target.value)} />
         </div>
-        <div className="col-md-6">
+        <div className="col-md-6 mb-3">
           <select className="form-select" value={filterClass} onChange={e => setFilterClass(e.target.value)}>
             <option value="">All Classes</option>
             {uniqueClasses.map(c => (
